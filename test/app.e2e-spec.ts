@@ -23,6 +23,17 @@ describe('AppController (e2e)', () => {
       .expect('Chào mừng đến với chợ đồ cũ!');
   });
 
+  it('/settings (GET) trả về đơn vị tiền tệ và giới hạn giá', async () => {
+    const response = await request(app.getHttpServer())
+      .get('/settings')
+      .expect(200);
+
+    expect(response.body).toEqual({
+      currency: 'VND',
+      priceLimit: expect.any(Number),
+    });
+  });
+
   afterEach(async () => {
     await app.close();
   });
