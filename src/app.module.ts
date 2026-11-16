@@ -12,6 +12,7 @@ import { Order } from './entities/order.entity';
 import { Post } from './entities/post.entity';
 import { Review } from './entities/review.entity';
 import { User } from './entities/user.entity';
+import { SeedModule } from './seed/seed.module';
 
 @Module({
   imports: [
@@ -29,6 +30,7 @@ import { User } from './entities/user.entity';
         synchronize: false,
       }),
     }),
+    SeedModule,
   ],
   controllers: [AppController],
   providers: [AppService, currencyProvider, priceLimitProvider],
