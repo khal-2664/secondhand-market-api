@@ -3,6 +3,10 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import {
+  currencyProvider,
+  priceLimitProvider,
+} from './common/business.providers';
 import { Category } from './entities/category.entity';
 import { Order } from './entities/order.entity';
 import { Post } from './entities/post.entity';
@@ -27,6 +31,6 @@ import { User } from './entities/user.entity';
     }),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, currencyProvider, priceLimitProvider],
 })
 export class AppModule {}
