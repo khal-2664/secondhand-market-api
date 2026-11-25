@@ -7,11 +7,13 @@ import {
   currencyProvider,
   priceLimitProvider,
 } from './common/business.providers';
+import { ShutdownService } from './common/shutdown.service';
 import { Category } from './entities/category.entity';
 import { Order } from './entities/order.entity';
 import { Post } from './entities/post.entity';
 import { Review } from './entities/review.entity';
 import { User } from './entities/user.entity';
+import { HealthModule } from './health/health.module';
 import { SeedModule } from './seed/seed.module';
 
 @Module({
@@ -30,9 +32,15 @@ import { SeedModule } from './seed/seed.module';
         synchronize: false,
       }),
     }),
+    HealthModule,
     SeedModule,
   ],
   controllers: [AppController],
-  providers: [AppService, currencyProvider, priceLimitProvider],
+  providers: [
+    AppService,
+    currencyProvider,
+    priceLimitProvider,
+    ShutdownService,
+  ],
 })
 export class AppModule {}
