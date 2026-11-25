@@ -1,19 +1,15 @@
 import { Controller, Get } from '@nestjs/common';
-import {
-  ApiBearerAuth,
-  ApiOperation,
-  ApiResponse,
-  ApiTags,
-} from '@nestjs/swagger';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import {
   HealthCheck,
   HealthCheckResult,
   HealthCheckService,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('health')
-@ApiBearerAuth()
+@Public()
 @Controller({ path: 'health', version: '1' })
 export class HealthController {
   constructor(
@@ -27,10 +23,6 @@ export class HealthController {
   @ApiResponse({
     status: 200,
     description: 'Hệ thống và cơ sở dữ liệu đang hoạt động bình thường',
-  })
-  @ApiResponse({
-    status: 401,
-    description: 'Thiếu hoặc sai token xác thực',
   })
   @ApiResponse({
     status: 503,

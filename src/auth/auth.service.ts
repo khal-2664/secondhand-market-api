@@ -71,6 +71,18 @@ export class AuthService {
     return { accessToken: await this.signAccessToken(user) };
   }
 
+  async me(userId: string): Promise<PublicUser> {
+    const user = await this.users.findOneBy({ id: userId });
+    if (!user) {
+      throw new AppError(
+        'INVALID_TOKEN',
+        'Token không hợp lệ hoặc đã hết hạn',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    return toPublicUser(user);
+  }
+
   private signAccessToken(user: User): Promise<string> {
     const payload: JwtPayload = {
       id: user.id,
