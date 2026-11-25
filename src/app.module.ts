@@ -16,6 +16,7 @@ import { Review } from './entities/review.entity';
 import { User } from './entities/user.entity';
 import { HealthModule } from './health/health.module';
 import { SeedModule } from './seed/seed.module';
+import { UsersModule } from './users/users.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { SeedModule } from './seed/seed.module';
     AuthModule,
     HealthModule,
     SeedModule,
+    UsersModule,
   ],
   controllers: [AppController],
   providers: [

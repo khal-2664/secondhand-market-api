@@ -8,6 +8,7 @@ import { User } from '../entities/user.entity';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
+import { RolesGuard } from './guards/roles.guard';
 
 @Module({
   imports: [
@@ -30,7 +31,9 @@ import { JwtAuthGuard } from './guards/jwt-auth.guard';
   providers: [
     AuthService,
     // guard toàn cục khai ở đây vì JwtAuthGuard cần JwtService của JwtModule
+    // thứ tự khai báo là thứ tự chạy: JwtAuthGuard gắn req.user trước khi RolesGuard đọc
     { provide: APP_GUARD, useClass: JwtAuthGuard },
+    { provide: APP_GUARD, useClass: RolesGuard },
   ],
 })
 export class AuthModule {}

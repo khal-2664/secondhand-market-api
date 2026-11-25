@@ -22,6 +22,7 @@ async function bootstrap() {
     .addBearerAuth()
     .addTag('app', 'Thông tin chung và cấu hình hệ thống')
     .addTag('auth', 'Đăng ký, đăng nhập và tài khoản hiện tại')
+    .addTag('users', 'Quản lý người dùng (quản trị viên)')
     .addTag('health', 'Kiểm tra trạng thái hệ thống')
     .addTag('posts', 'Tin đăng')
     .addTag('orders', 'Đơn mua')
