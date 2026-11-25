@@ -6,10 +6,12 @@ import {
   HealthCheckService,
   TypeOrmHealthIndicator,
 } from '@nestjs/terminus';
+import { SkipThrottle } from '@nestjs/throttler';
 import { Public } from '../auth/decorators/public.decorator';
 
 @ApiTags('health')
 @Public()
+@SkipThrottle({ short: true })
 @Controller({ path: 'health', version: '1' })
 export class HealthController {
   constructor(

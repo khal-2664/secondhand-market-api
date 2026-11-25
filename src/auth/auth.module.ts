@@ -3,6 +3,7 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtModule } from '@nestjs/jwt';
 import type { JwtSignOptions } from '@nestjs/jwt';
+import { ThrottlerGuard, ThrottlerModule } from '@nestjs/throttler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { RefreshToken } from '../entities/refresh-token.entity';
 import { User } from '../entities/user.entity';
@@ -14,6 +15,10 @@ import { RolesGuard } from './guards/roles.guard';
 @Module({
   imports: [
     TypeOrmModule.forFeature([User, RefreshToken]),
+    // giới hạn chung; login và register đặt giới hạn chặt hơn bằng @Throttle
+    ThrottlerModule.forRoot({
+      throttlers: [{ name: 'short', ttl: 10_000, limit: 30 }],
+    }),
     JwtModule.registerAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -33,6 +38,7 @@ import { RolesGuard } from './guards/roles.guard';
     AuthService,
     // guard toàn cục khai ở đây vì JwtAuthGuard cần JwtService của JwtModule
     // thứ tự khai báo là thứ tự chạy: JwtAuthGuard gắn req.user trước khi RolesGuard đọc
+    { provide: APP_GUARD, useClass: ThrottlerGuard },
     { provide: APP_GUARD, useClass: JwtAuthGuard },
     { provide: APP_GUARD, useClass: RolesGuard },
   ],

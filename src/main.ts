@@ -2,19 +2,30 @@ import { VersioningType } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import helmet from 'helmet';
 import { AppModule } from './app.module';
 import { AllExceptionsFilter } from './common/all-exceptions.filter';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
+  const config = app.get(ConfigService);
+
   app.enableShutdownHooks();
+  app.use(helmet());
+  app.enableCors({
+    origin: config
+      .get<string>('CORS_ORIGINS', '')
+      .split(',')
+      .map((origin) => origin.trim())
+      .filter(Boolean),
+    credentials: true,
+  });
   app.useGlobalFilters(new AllExceptionsFilter());
   app.enableVersioning({
     type: VersioningType.URI,
     defaultVersion: '1',
   });
 
-  const config = app.get(ConfigService);
   const swaggerConfig = new DocumentBuilder()
     .setTitle('API sàn mua bán đồ cũ')
     .setDescription('REST API cho hệ thống mua bán đồ cũ')

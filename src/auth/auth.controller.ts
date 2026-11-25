@@ -12,6 +12,7 @@ import {
   ApiResponse,
   ApiTags,
 } from '@nestjs/swagger';
+import { Throttle } from '@nestjs/throttler';
 import { AuthService } from './auth.service';
 import type { AuthTokens, JwtPayload, PublicUser } from './auth.types';
 import { CurrentUser } from './decorators/current-user.decorator';
@@ -26,6 +27,7 @@ export class AuthController {
   constructor(private readonly auth: AuthService) {}
 
   @Public()
+  @Throttle({ short: { ttl: 10_000, limit: 5 } })
   @Post('register')
   @ApiOperation({ summary: 'Đăng ký tài khoản mới' })
   @ApiResponse({ status: 201, description: 'Tạo tài khoản thành công' })
@@ -34,11 +36,13 @@ export class AuthController {
     status: 409,
     description: 'Email đã được sử dụng (EMAIL_TAKEN)',
   })
+  @ApiResponse({ status: 429, description: 'Gọi quá nhiều lần, thử lại sau' })
   register(@Body() dto: RegisterDto): Promise<PublicUser> {
     return this.auth.register(dto);
   }
 
   @Public()
+  @Throttle({ short: { ttl: 10_000, limit: 5 } })
   @Post('login')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({ summary: 'Đăng nhập lấy access token' })
@@ -50,6 +54,7 @@ export class AuthController {
     status: 401,
     description: 'Sai email hoặc mật khẩu (INVALID_CREDENTIALS)',
   })
+  @ApiResponse({ status: 429, description: 'Gọi quá nhiều lần, thử lại sau' })
   login(@Body() dto: LoginDto): Promise<AuthTokens> {
     return this.auth.login(dto);
   }
