@@ -6,6 +6,8 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
+export type UserRole = 'member' | 'admin';
+
 @Entity({ name: 'users' })
 @Check('CHK_users_rating_range', '"rating" >= 0 AND "rating" <= 5')
 export class User {
@@ -32,6 +34,9 @@ export class User {
     },
   })
   rating: number;
+
+  @Column({ type: 'varchar', length: 20, default: 'member' })
+  role: UserRole;
 
   @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
   createdAt: Date;
