@@ -23,7 +23,7 @@ export class SeedService implements OnModuleInit, OnModuleDestroy {
       const count = await this.categories.count();
       if (count > 0) {
         this.logger.log(
-          `Bảng categories đã có ${count} danh mục, bỏ qua bước nạp dữ liệu`,
+          `Bảng categories đã có ${count} danh mục, bỏ qua nạp dữ liệu`,
         );
         return;
       }
