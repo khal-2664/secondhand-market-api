@@ -16,6 +16,11 @@ export interface PublicUser {
   role: UserRole;
 }
 
+export interface AuthTokens {
+  accessToken: string;
+  refreshToken: string;
+}
+
 export interface AuthRequest extends Request {
   user?: JwtPayload;
 }

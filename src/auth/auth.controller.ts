@@ -13,10 +13,11 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import type { JwtPayload, PublicUser } from './auth.types';
+import type { AuthTokens, JwtPayload, PublicUser } from './auth.types';
 import { CurrentUser } from './decorators/current-user.decorator';
 import { Public } from './decorators/public.decorator';
 import { LoginDto } from './dto/login.dto';
+import { RefreshDto } from './dto/refresh.dto';
 import { RegisterDto } from './dto/register.dto';
 
 @ApiTags('auth')
@@ -43,14 +44,31 @@ export class AuthController {
   @ApiOperation({ summary: 'Đăng nhập lấy access token' })
   @ApiResponse({
     status: 200,
-    description: 'Đăng nhập thành công, trả accessToken',
+    description: 'Đăng nhập thành công, trả accessToken và refreshToken',
   })
   @ApiResponse({
     status: 401,
     description: 'Sai email hoặc mật khẩu (INVALID_CREDENTIALS)',
   })
-  login(@Body() dto: LoginDto): Promise<{ accessToken: string }> {
+  login(@Body() dto: LoginDto): Promise<AuthTokens> {
     return this.auth.login(dto);
+  }
+
+  @Public()
+  @Post('refresh')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Đổi refresh token lấy cặp token mới' })
+  @ApiResponse({
+    status: 200,
+    description: 'Cấp cặp token mới, token cũ bị thu hồi',
+  })
+  @ApiResponse({
+    status: 401,
+    description:
+      'Refresh token không hợp lệ, hết hạn hoặc đã dùng (INVALID_REFRESH_TOKEN)',
+  })
+  refresh(@Body() dto: RefreshDto): Promise<AuthTokens> {
+    return this.auth.refresh(dto?.refreshToken);
   }
 
   @Get('me')
