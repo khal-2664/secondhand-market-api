@@ -1,3 +1,4 @@
+import { DEFAULT_PRICE_LIMIT } from '../common/constants/price';
 import { validateEnv } from './env.schema';
 
 const valid = {
@@ -15,7 +16,7 @@ describe('validateEnv', () => {
     expect(result.DB_HOST).toBe('localhost');
     expect(result.DB_PORT).toBe(5432);
     expect(result.DB_NAME).toBe('secondhand_market');
-    expect(result.MAX_PRICE).toBeUndefined();
+    expect(result.MAX_PRICE).toBe(DEFAULT_PRICE_LIMIT);
   });
 
   it('đọc MAX_PRICE là số nguyên dương', () => {
@@ -23,9 +24,9 @@ describe('validateEnv', () => {
     expect(result.MAX_PRICE).toBe(25_000_000);
   });
 
-  it('cho phép để trống MAX_PRICE', () => {
+  it('dùng giá trị mặc định khi để trống MAX_PRICE', () => {
     const result = validateEnv({ ...valid, MAX_PRICE: '' });
-    expect(result.MAX_PRICE).toBeUndefined();
+    expect(result.MAX_PRICE).toBe(DEFAULT_PRICE_LIMIT);
   });
 
   it('ném lỗi tiếng Việt khi thiếu DB_NAME', () => {

@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { DEFAULT_PRICE_LIMIT } from '../common/constants/price';
 
 function emptyToUndefined(value: unknown): unknown {
   return value === '' || value === undefined || value === null
@@ -42,14 +43,14 @@ export const envSchema = z
         .number({ error: 'MAX_PRICE phải là số nguyên dương' })
         .int('MAX_PRICE phải là số nguyên dương')
         .positive('MAX_PRICE phải là số nguyên dương')
-        .optional(),
+        .default(DEFAULT_PRICE_LIMIT),
     ),
   })
   .passthrough();
 
-export function validateEnv(
-  config: Record<string, unknown>,
-): Record<string, unknown> {
+export type EnvVars = z.infer<typeof envSchema>;
+
+export function validateEnv(config: Record<string, unknown>): EnvVars {
   const result = envSchema.safeParse(config);
   if (!result.success) {
     const messages = [
