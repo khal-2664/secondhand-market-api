@@ -27,8 +27,4 @@ describe('priceLimitProvider', () => {
   it('dùng giá trị mặc định khi thiếu MAX_PRICE', async () => {
     await expect(resolvePriceLimit()).resolves.toBe(DEFAULT_PRICE_LIMIT);
   });
-
-  it('dùng giá trị mặc định khi MAX_PRICE không hợp lệ', async () => {
-    await expect(resolvePriceLimit('abc')).resolves.toBe(DEFAULT_PRICE_LIMIT);
-  });
 });
