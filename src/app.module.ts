@@ -8,7 +8,9 @@ import {
   currencyProvider,
   priceLimitProvider,
 } from './common/business.providers';
+import { ShutdownService } from './common/shutdown.service';
 import { buildTypeOrmOptions } from './database/typeorm.options';
+import { HealthModule } from './health/health.module';
 import { SeedModule } from './seed/seed.module';
 
 @Module({
@@ -18,9 +20,15 @@ import { SeedModule } from './seed/seed.module';
       inject: [ConfigService],
       useFactory: (config: ConfigService) => buildTypeOrmOptions(config),
     }),
+    HealthModule,
     SeedModule,
   ],
   controllers: [AppController],
-  providers: [AppService, currencyProvider, priceLimitProvider],
+  providers: [
+    AppService,
+    currencyProvider,
+    priceLimitProvider,
+    ShutdownService,
+  ],
 })
 export class AppModule {}
