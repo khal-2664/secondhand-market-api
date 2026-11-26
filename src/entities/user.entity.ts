@@ -4,11 +4,11 @@ import {
   USER_EMAIL_MAX_LENGTH,
   USER_NAME_MAX_LENGTH,
 } from '../common/constants/column-lengths';
-import { BaseEntity } from './base.entity';
+import { AbstractEntity } from './abstract.entity';
 
 @Entity({ name: 'users' })
 @Check('CHK_users_rating_range', '"rating" >= 0 AND "rating" <= 5')
-export class User extends BaseEntity {
+export class User extends AbstractEntity {
   @Column({ type: 'varchar', length: USER_NAME_MAX_LENGTH })
   name: string;
 

@@ -1,13 +1,13 @@
 import { Check, Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { POST_TITLE_MAX_LENGTH } from '../common/constants/column-lengths';
 import { PostStatus } from '../enums/post-status.enum';
-import { BaseEntity } from './base.entity';
+import { AbstractEntity } from './abstract.entity';
 import { Category } from './category.entity';
 import { User } from './user.entity';
 
 @Entity({ name: 'posts' })
 @Check('CHK_posts_price_positive', '"price" > 0')
-export class Post extends BaseEntity {
+export class Post extends AbstractEntity {
   @Column({ type: 'varchar', length: POST_TITLE_MAX_LENGTH })
   title: string;
 

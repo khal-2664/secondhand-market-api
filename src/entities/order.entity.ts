@@ -8,13 +8,13 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { OrderStatus } from '../enums/order-status.enum';
-import { BaseEntity } from './base.entity';
+import { AbstractEntity } from './abstract.entity';
 import { Post } from './post.entity';
 import { User } from './user.entity';
 
 @Entity({ name: 'orders' })
 @Check('CHK_orders_amount_positive', '"amount" > 0')
-export class Order extends BaseEntity {
+export class Order extends AbstractEntity {
   @Index()
   @Column({ name: 'post_id', type: 'uuid' })
   postId: string;

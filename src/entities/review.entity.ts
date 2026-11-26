@@ -7,13 +7,13 @@ import {
   ManyToOne,
   OneToOne,
 } from 'typeorm';
-import { BaseEntity } from './base.entity';
+import { AbstractEntity } from './abstract.entity';
 import { Order } from './order.entity';
 import { User } from './user.entity';
 
 @Entity({ name: 'reviews' })
 @Check('CHK_reviews_stars_range', '"stars" >= 1 AND "stars" <= 5')
-export class Review extends BaseEntity {
+export class Review extends AbstractEntity {
   @Column({ name: 'order_id', type: 'uuid' })
   orderId: string;
 
