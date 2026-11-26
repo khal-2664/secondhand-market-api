@@ -2,6 +2,7 @@ import {
   Check,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   UpdateDateColumn,
@@ -14,6 +15,7 @@ import { User } from './user.entity';
 @Entity({ name: 'orders' })
 @Check('CHK_orders_amount_positive', '"amount" > 0')
 export class Order extends BaseEntity {
+  @Index()
   @Column({ name: 'post_id', type: 'uuid' })
   postId: string;
 
@@ -21,6 +23,7 @@ export class Order extends BaseEntity {
   @JoinColumn({ name: 'post_id' })
   post: Post;
 
+  @Index()
   @Column({ name: 'buyer_id', type: 'uuid' })
   buyerId: string;
 

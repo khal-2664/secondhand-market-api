@@ -2,6 +2,7 @@ import {
   Check,
   Column,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
@@ -20,6 +21,7 @@ export class Review extends BaseEntity {
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
+  @Index()
   @Column({ name: 'reviewer_id', type: 'uuid' })
   reviewerId: string;
 
@@ -27,6 +29,7 @@ export class Review extends BaseEntity {
   @JoinColumn({ name: 'reviewer_id' })
   reviewer: User;
 
+  @Index()
   @Column({ name: 'reviewee_id', type: 'uuid' })
   revieweeId: string;
 

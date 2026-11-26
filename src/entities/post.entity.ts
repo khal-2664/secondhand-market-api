@@ -1,4 +1,4 @@
-import { Check, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { Check, Column, Entity, Index, JoinColumn, ManyToOne } from 'typeorm';
 import { POST_TITLE_MAX_LENGTH } from '../common/constants/column-lengths';
 import { PostStatus } from '../enums/post-status.enum';
 import { BaseEntity } from './base.entity';
@@ -25,6 +25,7 @@ export class Post extends BaseEntity {
   })
   status: PostStatus;
 
+  @Index()
   @Column({ name: 'seller_id', type: 'uuid' })
   sellerId: string;
 
@@ -32,6 +33,7 @@ export class Post extends BaseEntity {
   @JoinColumn({ name: 'seller_id' })
   seller: User;
 
+  @Index()
   @Column({ name: 'category_id', type: 'uuid' })
   categoryId: string;
 
