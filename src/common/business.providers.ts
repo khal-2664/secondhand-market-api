@@ -1,8 +1,9 @@
 import { Provider } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
+import { DEFAULT_PRICE_LIMIT } from './constants/price';
 import { CURRENCY, PRICE_LIMIT } from './tokens';
 
-export const DEFAULT_PRICE_LIMIT = 100_000_000;
+export { DEFAULT_PRICE_LIMIT };
 
 export const currencyProvider: Provider = {
   provide: CURRENCY,
@@ -12,8 +13,6 @@ export const currencyProvider: Provider = {
 export const priceLimitProvider: Provider = {
   provide: PRICE_LIMIT,
   inject: [ConfigService],
-  useFactory: (config: ConfigService): number => {
-    const value = Number(config.get<string>('MAX_PRICE'));
-    return Number.isInteger(value) && value > 0 ? value : DEFAULT_PRICE_LIMIT;
-  },
+  useFactory: (config: ConfigService): number =>
+    config.getOrThrow<number>('MAX_PRICE'),
 };

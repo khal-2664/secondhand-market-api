@@ -1,24 +1,26 @@
+import { Check, Column, Entity } from 'typeorm';
 import {
-  Check,
-  Column,
-  CreateDateColumn,
-  Entity,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+  PASSWORD_HASH_LENGTH,
+  USER_EMAIL_MAX_LENGTH,
+  USER_NAME_MAX_LENGTH,
+} from '../common/constants/column-lengths';
+import { AbstractEntity } from './abstract.entity';
 
 @Entity({ name: 'users' })
 @Check('CHK_users_rating_range', '"rating" >= 0 AND "rating" <= 5')
-export class User {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'varchar', length: 100 })
+export class User extends AbstractEntity {
+  @Column({ type: 'varchar', length: USER_NAME_MAX_LENGTH })
   name: string;
 
-  @Column({ type: 'varchar', length: 255, unique: true })
+  @Column({ type: 'varchar', length: USER_EMAIL_MAX_LENGTH, unique: true })
   email: string;
 
-  @Column({ name: 'password_hash', type: 'varchar', length: 255 })
+  @Column({
+    name: 'password_hash',
+    type: 'varchar',
+    length: PASSWORD_HASH_LENGTH,
+    select: false,
+  })
   passwordHash: string;
 
   @Column({
@@ -32,7 +34,4 @@ export class User {
     },
   })
   rating: number;
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-  createdAt: Date;
 }

@@ -1,22 +1,19 @@
 import {
   Check,
   Column,
-  CreateDateColumn,
   Entity,
+  Index,
   JoinColumn,
   ManyToOne,
   OneToOne,
-  PrimaryGeneratedColumn,
 } from 'typeorm';
+import { AbstractEntity } from './abstract.entity';
 import { Order } from './order.entity';
 import { User } from './user.entity';
 
 @Entity({ name: 'reviews' })
 @Check('CHK_reviews_stars_range', '"stars" >= 1 AND "stars" <= 5')
-export class Review {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
+export class Review extends AbstractEntity {
   @Column({ name: 'order_id', type: 'uuid' })
   orderId: string;
 
@@ -24,6 +21,7 @@ export class Review {
   @JoinColumn({ name: 'order_id' })
   order: Order;
 
+  @Index()
   @Column({ name: 'reviewer_id', type: 'uuid' })
   reviewerId: string;
 
@@ -31,6 +29,7 @@ export class Review {
   @JoinColumn({ name: 'reviewer_id' })
   reviewer: User;
 
+  @Index()
   @Column({ name: 'reviewee_id', type: 'uuid' })
   revieweeId: string;
 
@@ -43,7 +42,4 @@ export class Review {
 
   @Column({ type: 'text', nullable: true })
   comment: string | null;
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-  createdAt: Date;
 }
