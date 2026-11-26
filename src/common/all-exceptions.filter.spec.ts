@@ -3,6 +3,7 @@ import {
   BadRequestException,
   HttpStatus,
   Logger,
+  NotFoundException,
   ServiceUnavailableException,
 } from '@nestjs/common';
 import { AllExceptionsFilter } from './all-exceptions.filter';
@@ -66,7 +67,7 @@ describe('AllExceptionsFilter', () => {
     expect(errorSpy).not.toHaveBeenCalled();
   });
 
-  it('chuẩn hóa lỗi Nest có mảng message và giữ body vào details', () => {
+  it('chuẩn hóa lỗi Nest có mảng message, không lặp body mặc định vào details', () => {
     const { host, status, json } = createHttpHost('POST', '/v1/posts');
     const error = new BadRequestException([
       'title không được để trống',
@@ -79,12 +80,23 @@ describe('AllExceptionsFilter', () => {
     expect(json).toHaveBeenCalledWith({
       code: 'BAD_REQUEST',
       message: 'title không được để trống; price phải dương',
-      details: {
-        message: ['title không được để trống', 'price phải dương'],
-        error: 'Bad Request',
-        statusCode: 400,
-      },
       path: '/v1/posts',
+      timestamp: expect.any(String),
+    });
+    expect(warnSpy).toHaveBeenCalledTimes(1);
+  });
+
+  it('không gán details khi lỗi Nest chỉ có message, error, statusCode', () => {
+    const { host, status, json } = createHttpHost('GET', '/settings');
+    const error = new NotFoundException('Cannot GET /settings');
+
+    filter.catch(error, host);
+
+    expect(status).toHaveBeenCalledWith(404);
+    expect(json).toHaveBeenCalledWith({
+      code: 'NOT_FOUND',
+      message: 'Cannot GET /settings',
+      path: '/settings',
       timestamp: expect.any(String),
     });
     expect(warnSpy).toHaveBeenCalledTimes(1);

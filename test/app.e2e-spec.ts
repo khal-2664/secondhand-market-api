@@ -48,11 +48,6 @@ describe('AppController (e2e)', () => {
     expect(response.body).toEqual({
       code: 'NOT_FOUND',
       message: 'Cannot GET /settings',
-      details: {
-        message: 'Cannot GET /settings',
-        error: 'Not Found',
-        statusCode: 404,
-      },
       path: '/settings',
       timestamp: expect.any(String),
     });

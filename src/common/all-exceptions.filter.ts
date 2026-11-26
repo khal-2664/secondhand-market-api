@@ -10,6 +10,22 @@ import type { Request, Response } from 'express';
 
 const GENERIC_SERVER_ERROR_MESSAGE = 'Lỗi hệ thống, vui lòng thử lại sau';
 
+function extraHttpDetails(body: Record<string, unknown>): unknown {
+  const extra: Record<string, unknown> = {};
+
+  for (const [key, value] of Object.entries(body)) {
+    if (key === 'message' || key === 'statusCode') {
+      continue;
+    }
+    if (key === 'error' && typeof value === 'string') {
+      continue;
+    }
+    extra[key] = value;
+  }
+
+  return Object.keys(extra).length > 0 ? extra : undefined;
+}
+
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
   private readonly logger = new Logger(AllExceptionsFilter.name);
@@ -40,7 +56,7 @@ export class AllExceptionsFilter implements ExceptionFilter {
             details = b.details;
           }
         } else {
-          details = body;
+          details = extraHttpDetails(b);
         }
 
         if (Array.isArray(b.message)) {
