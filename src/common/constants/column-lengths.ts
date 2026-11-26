@@ -1,0 +1,6 @@
+export const USER_NAME_MAX_LENGTH = 100;
+export const USER_EMAIL_MAX_LENGTH = 255;
+export const PASSWORD_HASH_LENGTH = 255;
+export const CATEGORY_NAME_MAX_LENGTH = 100;
+export const CATEGORY_SLUG_MAX_LENGTH = 100;
+export const POST_TITLE_MAX_LENGTH = 255;

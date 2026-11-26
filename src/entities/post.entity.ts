@@ -1,28 +1,14 @@
-import {
-  Check,
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Check, Column, Entity, JoinColumn, ManyToOne } from 'typeorm';
+import { POST_TITLE_MAX_LENGTH } from '../common/constants/column-lengths';
+import { PostStatus } from '../enums/post-status.enum';
+import { BaseEntity } from './base.entity';
 import { Category } from './category.entity';
 import { User } from './user.entity';
 
-export enum PostStatus {
-  Available = 'available',
-  Reserved = 'reserved',
-  Sold = 'sold',
-}
-
 @Entity({ name: 'posts' })
 @Check('CHK_posts_price_positive', '"price" > 0')
-export class Post {
-  @PrimaryGeneratedColumn('uuid')
-  id: string;
-
-  @Column({ type: 'varchar', length: 255 })
+export class Post extends BaseEntity {
+  @Column({ type: 'varchar', length: POST_TITLE_MAX_LENGTH })
   title: string;
 
   @Column({ type: 'text' })
@@ -52,7 +38,4 @@ export class Post {
   @ManyToOne(() => Category)
   @JoinColumn({ name: 'category_id' })
   category: Category;
-
-  @CreateDateColumn({ name: 'created_at', type: 'timestamptz' })
-  createdAt: Date;
 }
